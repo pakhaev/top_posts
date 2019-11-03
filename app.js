@@ -25,10 +25,10 @@ addEl.addEventListener('click', function () {
     messageEl.innerHTML = `
         <img src="http://placekitten.com/50/50">
         ${message.content}
-        <span>| likes:</span>
+        <span>| ♡</span>
         <span data-action="likesEl">${message.likes}</span>
-        <button data-action="likes" class="btn btn-default">❤</button>
-        <button data-action="dislikes" class="btn btn-default">💔</button>
+        <button data-action="likes" class="btn btn-primary">like</button>
+        <button data-action="dislikes" class="btn btn-danger">dislike</button>
         <button data-action="toggle-favorite" class="btn btn-info">*</button>
         <button data-action="remove" class="btn btn-secondary">x</button>
     `;
