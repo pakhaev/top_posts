@@ -7,13 +7,31 @@ messagesEl.className = 'card';
 messagesEl.dataset.id = 'messages'; 
 rootEl.appendChild(messagesEl);
 
-const addEl = document.createElement('button');
-addEl.textContent = 'Добавить пост';
+const addFormEl = document.createElement('form');
+addFormEl.className = 'form-inline mb-2'; 
+addFormEl.innerHTML = `
+    <div class="form-group">
+        <input class="form-control" data-id="link">
+    </div>
+    <select class="custom-select" data-id="type">
+        <option value="regular">Обычный</option>
+        <option value="image">Изображение</option>
+    </select>
+    <button class="btn btn-primary" id='ok'>Ok</button>
+`;
+
+const linkEl = addFormEl.querySelector('[data-id=link]');
+const typeEl = addFormEl.querySelector('[data-id=type]');
+rootEl.appendChild(addFormEl);
+
+const addEl = document.getElementById('ok');
 
 addEl.addEventListener('click', function () {
     const message = {
         id: nextId,
-        content: `Пост: ${nextId}`,
+        postNumber: `Пост: ${nextId}`,
+        content: linkEl.value,
+        type: typeEl.value,
         favorite: false,
         selected: false,
         likes: 0,
@@ -22,16 +40,32 @@ addEl.addEventListener('click', function () {
     messages.push(message);
     const messageEl = document.createElement('div');
     messageEl.className = 'card-img-top';
-    messageEl.innerHTML = `
-        <img src="http://placekitten.com/50/50">
-        ${message.content}
-        <span>| ♡</span>
-        <span data-action="likesEl">${message.likes}</span>
-        <button data-action="likes" class="btn btn-primary">like</button>
-        <button data-action="dislikes" class="btn btn-danger">dislike</button>
-        <button data-action="toggle-favorite" class="btn btn-info">*</button>
-        <button data-action="remove" class="btn btn-secondary">x</button>
-    `;
+
+    if(message.type=='regular'){
+        messageEl.innerHTML = `
+        <hr>
+            <p>${message.content}</p>
+            ${message.postNumber}
+            <span>| ♡</span>
+            <span data-action="likesEl">${message.likes}</span>
+            <button data-action="likes" class="btn btn-primary">like</button>
+            <button data-action="dislikes" class="btn btn-danger">dislike</button>
+            <button data-action="toggle-favorite" class="btn btn-info">*</button>
+            <button data-action="remove" class="btn btn-secondary">x</button>
+        `;
+    } else if(message.type == 'image') {
+        messageEl.innerHTML = `
+        <hr>
+        <img src="${message.content}" class="card-img-top">
+            ${message.postNumber}
+            <span>| ♡</span>
+            <span data-action="likesEl">${message.likes}</span>
+            <button data-action="likes" class="btn btn-primary">like</button>
+            <button data-action="dislikes" class="btn btn-danger">dislike</button>
+            <button data-action="toggle-favorite" class="btn btn-info">*</button>
+            <button data-action="remove" class="btn btn-secondary">x</button>
+        `;
+    }
 
     console.dir(messageEl);
 
@@ -90,6 +124,7 @@ addEl.addEventListener('click', function () {
     
     messagesEl.appendChild(messageEl);
     nextId++;
+    linkEl.value = '';
 });
 
 rootEl.appendChild(addEl);
